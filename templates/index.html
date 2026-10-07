@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Power Plant Energy Output Prediction</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🏭
+        </div>
+
+        <div>
+            <h1>Power Plant Energy Output Prediction</h1>
+
+            <p>
+                Machine Learning Based Combined Cycle Power Plant Prediction System
+            </p>
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="main-layout">
+
+
+    <!-- ================= LEFT PANEL ================= -->
+
+    <aside class="left-panel">
+
+        <h2>Power Plant Prediction</h2>
+
+        <p class="description">
+            Enter the plant operating and environmental conditions
+            to predict electrical energy output.
+        </p>
+
+
+        <!-- AT -->
+
+        <div class="input-group">
+
+            <label>
+                🌡 Ambient Temperature (AT)
+                <span>°C</span>
+            </label>
+
+            <input
+                type="number"
+                id="at"
+                placeholder="Example: 25"
+                step="0.01"
+            >
+
+        </div>
+
+
+        <!-- V -->
+
+        <div class="input-group">
+
+            <label>
+                💨 Exhaust Vacuum (V)
+                <span>cm Hg</span>
+            </label>
+
+            <input
+                type="number"
+                id="v"
+                placeholder="Example: 60"
+                step="0.01"
+            >
+
+        </div>
+
+
+        <!-- AP -->
+
+        <div class="input-group">
+
+            <label>
+                🌎 Ambient Pressure (AP)
+                <span>mbar</span>
+            </label>
+
+            <input
+                type="number"
+                id="ap"
+                placeholder="Example: 1010"
+                step="0.01"
+            >
+
+        </div>
+
+
+        <!-- RH -->
+
+        <div class="input-group">
+
+            <label>
+                💧 Relative Humidity (RH)
+                <span>%</span>
+            </label>
+
+            <input
+                type="number"
+                id="rh"
+                placeholder="Example: 70"
+                step="0.01"
+            >
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <button id="predictBtn">
+
+            ⚡ Predict Energy Output
+
+        </button>
+
+
+        <p id="errorMessage"></p>
+
+
+        <!-- ================= PREDICTION OUTPUT ================= -->
+
+        <div class="prediction-box">
+
+            <h3>
+                📊 Predicted Electrical Energy Output
+            </h3>
+
+            <div class="prediction-number">
+
+                <span id="predictionValue">--</span>
+
+                <small>MW</small>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= SUMMARY ================= -->
+
+        <div class="summary-card">
+
+            <h3>📋 Prediction Summary</h3>
+
+
+            <div class="summary-item">
+
+                <span>
+                    🌡 Ambient Temperature
+                </span>
+
+                <strong id="summaryAT">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="summary-item">
+
+                <span>
+                    💨 Exhaust Vacuum
+                </span>
+
+                <strong id="summaryV">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="summary-item">
+
+                <span>
+                    🌎 Ambient Pressure
+                </span>
+
+                <strong id="summaryAP">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="summary-item">
+
+                <span>
+                    💧 Relative Humidity
+                </span>
+
+                <strong id="summaryRH">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="summary-item">
+
+                <span>
+                    🕒 Prediction Time
+                </span>
+
+                <strong id="predictionTime">
+                    --
+                </strong>
+
+            </div>
+
+
+            <div class="summary-item output-summary">
+
+                <span>
+                    ⚡ Predicted Energy Output
+                </span>
+
+                <strong id="summaryPE">
+                    --
+                </strong>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ================= RIGHT PANEL ================= -->
+
+    <main class="right-panel">
+
+
+        <!-- POWER PLANT HERO -->
+
+        <section class="plant-hero">
+
+            <div class="plant-overlay">
+
+                <div>
+
+                    <span class="small-title">
+                        COMBINED CYCLE POWER PLANT
+                    </span>
+
+                    <h2>
+                        Intelligent Energy Output Prediction
+                    </h2>
+
+                    <p>
+                        Machine learning prediction using real environmental
+                        and operational plant conditions.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= MODEL CARDS ================= -->
+
+        <section class="model-stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ⚙️
+                </div>
+
+                <div>
+
+                    <span>
+                        Model Used
+                    </span>
+
+                    <strong>
+                        Optimized Random Forest
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    📈
+                </div>
+
+                <div>
+
+                    <span>
+                        R² Score
+                    </span>
+
+                    <strong id="r2Value">
+                        Model Performance
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon status">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>
+                        System Status
+                    </span>
+
+                    <strong>
+                        Ready
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= GRAPH ================= -->
+
+        <section class="chart-card">
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        📈 Predicted vs Actual Energy Output
+                    </h2>
+
+                    <p>
+                        Comparison of model predictions with actual power output.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="chart-wrapper">
+
+                <canvas id="predictionChart"></canvas>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= INFO ================= -->
+
+        <section class="bottom-info">
+
+
+            <div class="info-card">
+
+                <h3>⚡ Prediction Model</h3>
+
+                <p>
+                    The optimized machine learning model predicts electrical
+                    power output using Ambient Temperature, Exhaust Vacuum,
+                    Ambient Pressure and Relative Humidity.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <h3>🎯 Prediction Target</h3>
+
+                <p>
+                    The target variable is PE — the net hourly electrical
+                    energy output generated by the Combined Cycle Power Plant,
+                    measured in megawatts.
+                </p>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
